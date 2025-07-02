@@ -1,0 +1,45 @@
+const canvas = document.getElementById('confetti-canvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const hearts = [];
+
+for (let i = 0; i < 100; i++) {
+  hearts.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 10 + 5,
+    speed: Math.random() * 2 + 1,
+    angle: Math.random() * 360
+  });
+}
+
+function drawHeart(x, y, size) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(Math.PI / 4);
+  ctx.fillStyle = "#ff4d6d";
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.bezierCurveTo(-size / 2, -size / 2, -size, size / 3, 0, size);
+  ctx.bezierCurveTo(size, size / 3, size / 2, -size / 2, 0, 0);
+  ctx.fill();
+  ctx.restore();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let h of hearts) {
+    drawHeart(h.x, h.y, h.size);
+    h.y += h.speed;
+    if (h.y > canvas.height) {
+      h.y = -10;
+      h.x = Math.random() * canvas.width;
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+animate();
